@@ -28,11 +28,14 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Set permissions
-RUN chmod -R 775 storage bootstrap/cache \
-    && chown -R www-data:www-data storage bootstrap/cache
+RUN chmod -R 777 storage bootstrap/cache
+
+# Copy and prepare startup script
+COPY start.sh /app/start.sh
+RUN chmod +x /app/start.sh
 
 # Expose port
 EXPOSE 8000
 
 # Start command
-CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT
+CMD ["/bin/sh", "/app/start.sh"]
