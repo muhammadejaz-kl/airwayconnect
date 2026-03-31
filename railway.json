@@ -1,12 +1,12 @@
 {
   "$schema": "https://railway.com/railway.schema.json",
   "build": {
-    "builder": "NIXPACKS",
-    "buildCommand": "composer install --optimize-autoloader --no-dev --ignore-platform-req=ext-zip --ignore-platform-req=ext-gd && php artisan config:cache && php artisan route:cache && php artisan view:cache"
+    "builder": "DOCKERFILE",
+    "dockerfilePath": "Dockerfile"
   },
   "deploy": {
-    "startCommand": "php artisan migrate --force && php artisan storage:link && php artisan serve --host=0.0.0.0 --port=$PORT",
+    "startCommand": "php artisan migrate --force && php artisan storage:link --force && php artisan config:cache && php artisan route:cache && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}",
     "restartPolicyType": "ON_FAILURE",
-    "restartPolicyMaxRetries": 10
+    "restartPolicyMaxRetries": 5
   }
 }
