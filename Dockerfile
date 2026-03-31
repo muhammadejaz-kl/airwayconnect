@@ -11,6 +11,8 @@ RUN apt-get update && apt-get install -y \
     libicu-dev \
     zip \
     unzip \
+    nodejs \
+    npm \
     && docker-php-ext-configure intl \
     && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd zip intl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -26,6 +28,9 @@ COPY . .
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# Install Node dependencies and build assets
+RUN npm ci && npm run build && rm -rf node_modules
 
 # Set permissions
 RUN chmod -R 777 storage bootstrap/cache
