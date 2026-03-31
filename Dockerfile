@@ -30,7 +30,7 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Install Node dependencies and build assets
-RUN npm ci && npm run build && rm -rf node_modules
+RUN rm -f package-lock.json && npm install && npm run build && rm -rf node_modules
 
 # Set permissions
 RUN chmod -R 777 storage bootstrap/cache
