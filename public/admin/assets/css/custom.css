@@ -1,0 +1,25 @@
+/* #datatable-wrapper {
+    .paginate_button.disabled {
+        color: #fff !important;
+    }
+} */
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+    color: #fff !important;
+}
+
+.testimonial-text {
+    p {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 4;
+        line-clamp: 4;
+    }
+
+    .card-body-ts {
+        background-color: grey;
+    }
+
+    
+}
