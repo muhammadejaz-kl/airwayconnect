@@ -119,7 +119,9 @@
                 $currentRoute !== 'user.resume.clearSession' &&
                 $currentRoute !== 'user.profile.index' &&
                 $currentRoute !== 'user.airlineDirectory.index' &&
-                $currentRoute !== 'user.premium.index'
+                $currentRoute !== 'user.premium.index' &&
+                $currentRoute !== 'user.interview.index' &&
+                $currentRoute !== 'user.interview.show'
             )
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
