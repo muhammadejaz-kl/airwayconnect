@@ -490,7 +490,10 @@ class ResumeController extends Controller
 
         UserResume::updateOrCreate(
             ['user_id' => $user->id],
-            ['resume' => $path]
+            [
+                'resume'      => $path,
+                'template_id' => session('selected_template_id', 'template1'),
+            ]
         );
 
         return response()->json(['success' => true, 'path' => $path]);
@@ -587,10 +590,75 @@ class ResumeController extends Controller
         }
     }
 
-    public function clearSession(Request $request)
+    private function buildResumeData(int $userId): array
+    {
+        $contact    = ResumeContactDetail::where('user_id', $userId)->first();
+        $works      = ResumeWorkHistory::where('user_id', $userId)->get();
+        $educations = ResumeEducationCertification::where('user_id', $userId)->get();
+        $skills     = ResumeUserSkill::where('user_id', $userId)->pluck('skill');
+        $summary    = ResumeUserSummary::where('user_id', $userId)->first();
+
+        // Decode certificates stored as a JSON array string (e.g. ["Test Certification"])
+        foreach ($educations as $edu) {
+            $raw = $edu->certificates ?? '';
+            if (is_string($raw) && str_starts_with(ltrim($raw), '[')) {
+                $decoded = json_decode($raw, true);
+                $edu->certificates = is_array($decoded)
+                    ? implode(', ', array_filter($decoded))
+                    : $raw;
+            }
+        }
+
+        return compact('contact', 'works', 'educations', 'skills', 'summary');
+    }
+
+    private function renderResumePdf(int $userId): \Barryvdh\DomPDF\PDF
+    {
+        $userResume = UserResume::where('user_id', $userId)->first();
+        if (!$userResume) {
+            abort(404, 'No saved resume found. Please complete the Resume Builder first.');
+        }
+
+        $data = $this->buildResumeData($userId);
+
+        // Guard: ensure core data exists
+        if (!$data['contact'] || $data['works']->isEmpty()) {
+            abort(422, 'Resume data is incomplete. Please go through the Resume Builder again to repopulate your resume.');
+        }
+
+        $templateId = $userResume->template_id ?? 'template1';
+        $pdfViewMap = [
+            'template1' => 'user.resume.pdf.template1',
+            'template2' => 'user.resume.pdf.template2',
+            'template3' => 'user.resume.pdf.template3',
+        ];
+        $view = $pdfViewMap[$templateId] ?? 'user.resume.pdf.template1';
+
+        return Pdf::loadView($view, $data)
+            ->setPaper('a4', 'portrait')
+            ->setOption('defaultFont', 'DejaVu Sans')
+            ->setOption('isRemoteEnabled', false)
+            ->setOption('dpi', 150);
+    }
+
+    public function viewResumePdf()
     {
         $user = auth()->user();
+        $pdf  = $this->renderResumePdf($user->id);
+        return $pdf->stream('resume_' . $user->id . '.pdf');
+    }
 
+    public function downloadResumePdf()
+    {
+        $user = auth()->user();
+        $pdf  = $this->renderResumePdf($user->id);
+        return $pdf->download('resume_' . $user->id . '.pdf');
+    }
+
+    public function clearSession(Request $request)
+    {
+        // Only clear session variables — resume data must stay in the DB so
+        // downloadResumePdf / viewResumePdf can render the PDF at any time.
         session()->forget([
             'jobs',
             'educations',
@@ -598,12 +666,6 @@ class ResumeController extends Controller
             'experience_level',
             'selected_template_id'
         ]);
-
-        ResumeContactDetail::where('user_id', $user->id)->delete();
-        ResumeWorkHistory::where('user_id', $user->id)->delete();
-        ResumeEducationCertification::where('user_id', $user->id)->delete();
-        ResumeUserSkill::where('user_id', $user->id)->delete();
-        ResumeUserSummary::where('user_id', $user->id)->delete();
 
         return response()->json(['success' => true]);
     }

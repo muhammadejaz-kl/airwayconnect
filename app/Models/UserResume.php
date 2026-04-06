@@ -9,5 +9,6 @@ class UserResume extends Model
     protected $fillable = [
         'user_id',
         'resume',
+        'template_id',
     ];
 }

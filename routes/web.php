@@ -236,6 +236,8 @@ Route::middleware(['auth'])->group(function () {
 
             Route::post('save-image', [ResumeController::class, 'saveResumeImage'])->name('save.image');
             Route::post('convert-to-pdf', [ResumeController::class, 'convertToPdf'])->name('convert.pdf');
+            Route::get('view-pdf', [ResumeController::class, 'viewResumePdf'])->name('view.pdf');
+            Route::get('download-pdf', [ResumeController::class, 'downloadResumePdf'])->name('download.pdf');
             Route::post('clear-session', [ResumeController::class, 'clearSession'])->name('clearSession');
         });
 
