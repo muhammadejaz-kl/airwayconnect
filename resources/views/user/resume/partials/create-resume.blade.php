@@ -18,7 +18,7 @@
 
     <div class="text-center">
         @if($resume && $resume->resume)
-            <img src="{{ asset('storage/' . $resume->resume) }}" alt="Your Resume"
+            <img src="{{ route('user.resume.image') }}" alt="Your Resume"
                 class="w-[80%] md:h-[700px] mx-auto shadow-lg border border-gray-300">
 
             <div class="flex justify-center gap-4 mt-2">

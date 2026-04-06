@@ -612,6 +612,24 @@ class ResumeController extends Controller
         return compact('contact', 'works', 'educations', 'skills', 'summary');
     }
 
+    public function serveResumeImage()
+    {
+        $user   = auth()->user();
+        $resume = UserResume::where('user_id', $user->id)->first();
+
+        if (!$resume || !$resume->resume) {
+            abort(404);
+        }
+
+        $path = storage_path('app/public/' . $resume->resume);
+
+        if (!file_exists($path)) {
+            abort(404);
+        }
+
+        return response()->file($path, ['Content-Type' => 'image/png', 'Cache-Control' => 'no-store']);
+    }
+
     private function renderResumePdf(int $userId): \Barryvdh\DomPDF\PDF
     {
         $userResume = UserResume::where('user_id', $userId)->first();
