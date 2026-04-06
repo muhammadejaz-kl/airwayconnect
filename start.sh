@@ -11,5 +11,8 @@ php artisan migrate --force
 echo "--- Running Seeders ---"
 php artisan db:seed --force
 
+echo "--- Creating Storage Symlink ---"
+php artisan storage:link --force
+
 echo "--- Starting Server on 0.0.0.0:${PORT} ---"
 exec php artisan serve --host=0.0.0.0 --port=${PORT}

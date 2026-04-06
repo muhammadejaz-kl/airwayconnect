@@ -574,17 +574,33 @@ class ResumeController extends Controller
                 ->setOption('dpi', $dpi);
 
             $pdfName = pathinfo($imageRelative, PATHINFO_FILENAME) . '.pdf';
-            $pdfPath = 'resumes/' . $pdfName;
-
-            Storage::disk('public')->put($pdfPath, $pdf->output());
 
             return response()->json([
                 'success' => true,
-                'pdf_path' => asset('storage/' . $pdfPath)
+                'pdf_data' => base64_encode($pdf->output()),
+                'filename' => $pdfName,
             ]);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Conversion failed: ' . $e->getMessage()], 500);
         }
+    }
+
+    public function serveImage()
+    {
+        $user = auth()->user();
+        $resume = UserResume::where('user_id', $user->id)->first();
+
+        if (!$resume || !$resume->resume) {
+            abort(404);
+        }
+
+        $path = storage_path('app/public/' . $resume->resume);
+
+        if (!file_exists($path)) {
+            abort(404);
+        }
+
+        return response()->file($path, ['Content-Type' => 'image/png']);
     }
 
     public function clearSession(Request $request)

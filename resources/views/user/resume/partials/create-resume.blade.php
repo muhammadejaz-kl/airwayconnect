@@ -18,7 +18,7 @@
 
     <div class="text-center">
         @if($resume && $resume->resume)
-            <img src="{{ asset('storage/' . $resume->resume) }}" alt="Your Resume"
+            <img src="{{ route('user.resume.serve.image') }}" alt="Your Resume"
                 class="w-[80%] md:h-[700px] mx-auto shadow-lg border border-gray-300">
 
             <div class="flex justify-center gap-4 mt-2">
@@ -59,12 +59,16 @@
                 success: function (response) {
                     Swal.close();
                     if (response.success) {
+                        const bytes = Uint8Array.from(atob(response.pdf_data), c => c.charCodeAt(0));
+                        const blob = new Blob([bytes], {type: 'application/pdf'});
+                        const url = URL.createObjectURL(blob);
                         const link = document.createElement('a');
-                        link.href = response.pdf_path;
-                        link.download = response.pdf_path.split('/').pop();
+                        link.href = url;
+                        link.download = response.filename;
                         document.body.appendChild(link);
                         link.click();
                         document.body.removeChild(link);
+                        URL.revokeObjectURL(url);
 
                         Swal.fire({
                             title: 'Downloaded!',
@@ -108,8 +112,12 @@
                 },
                 success: function (response) {
                     Swal.close();
-                    if (response.success && response.pdf_path) {
-                        window.open(response.pdf_path, '_blank');
+                    if (response.success && response.pdf_data) {
+                        const bytes = Uint8Array.from(atob(response.pdf_data), c => c.charCodeAt(0));
+                        const blob = new Blob([bytes], {type: 'application/pdf'});
+                        const url = URL.createObjectURL(blob);
+                        window.open(url, '_blank');
+                        setTimeout(() => URL.revokeObjectURL(url), 10000);
                     } else {
                         Swal.fire({
                             title: 'Error!',
