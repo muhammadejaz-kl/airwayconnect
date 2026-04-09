@@ -9,23 +9,37 @@
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
+        <!-- Username -->
+        <div class="mt-4">
+            <x-input-label for="username" :value="__('User Name')" class="text-sm text-white" />
+            <x-text-input id="username" class="block mt-1 w-full" type="text" name="username" placeholder="Choose a unique username" :value="old('username')" required autocomplete="off" />
+            <x-input-error :messages="$errors->get('username')" class="mt-2" />
+        </div>
+
         <!-- Email -->
         <div class="mt-4">
             <x-input-label for="email" :value="__('Email')" class="text-sm text-white" />
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" placeholder="Enter Your Email" :value="old('email')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
-
+        
         <!-- Phone -->
         <div class="mt-4">
             <x-input-label for="phone" :value="__('Phone Number')" class="text-sm text-white" />
             <input type="tel" id="phone" maxlength="15" class="w-full px-4 py-2 rounded-lg custom-number" placeholder="Enter phone number">
-
+            
             <!-- Hidden fields -->
             <input type="hidden" name="phone_code" id="phone_code">
             <input type="hidden" name="phone_number" id="phone_number">
-
+            
             <x-input-error :messages="$errors->get('phone_number')" class="mt-2" />
+        </div>
+        
+        <!-- Job Title -->
+        <div class="mt-4">
+            <x-input-label for="job_title" :value="__('Job Title')" class="text-sm text-white" />
+            <x-text-input id="job_title" class="block mt-1 w-full" type="text" name="job_title" placeholder="Enter Your Job Title" :value="old('job_title')" autocomplete="organization-title" />
+            <x-input-error :messages="$errors->get('job_title')" class="mt-2" />
         </div>
 
         <!-- Password -->

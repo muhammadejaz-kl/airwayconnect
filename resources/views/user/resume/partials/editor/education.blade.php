@@ -62,13 +62,14 @@
                     <option value="PhD">Ph.D.</option>
                 </select>
             </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div>
+                        <div>
                 <label class="block text-white mb-2">Field of Study</label>
                 <input type="text" id="fieldOfStudy" name="field_of_study" class="w-full px-4 py-3 rounded-lg bg-secondary-color text-white" placeholder="Enter Your Field Of Study">
             </div>
+        </div>
+
+        <div class="mb-6">
+
             <div>
                 <label class="block text-white mb-2">Graduation date (or Expected Graduation date) <span class="text-red-600">*</span></label>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

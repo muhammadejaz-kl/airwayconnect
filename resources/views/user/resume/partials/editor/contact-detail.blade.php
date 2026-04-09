@@ -75,7 +75,7 @@
 
         <!-- Hobbies -->
         <div>
-            <label class="text-sm">Hobbies <span class="text-red-600">*</span></label>
+            <label class="text-sm">Hobbies</label>
             <input type="text" placeholder="Hobbies" name="hobbies" class="w-full px-3 py-2 rounded-lg bg-secondary-color">
         </div>
 

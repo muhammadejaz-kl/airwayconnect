@@ -34,16 +34,22 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:30', 'alpha_dash', 'unique:users,username'],
+            'job_title' => ['nullable', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'phone_code' => ['required', 'string'],
             'phone_number' => ['required', 'string', 'unique:users,phone_number'],
         ], [
+            'username.unique' => 'That username is already taken. Please choose a different one.',
+            'username.alpha_dash' => 'Username may only contain letters, numbers, dashes, and underscores.',
             'phone_number.unique' => 'The phone number has already been taken.',
         ]);
 
         $user = User::create([
             'name' => $request->name,
+            'username' => $request->username,
+            'job_title' => $request->job_title,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'phone_code' => '+' . $request->phone_code,

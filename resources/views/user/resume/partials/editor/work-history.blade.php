@@ -72,7 +72,6 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div></div>
             <label class="flex items-center space-x-2">
                 <input type="checkbox" id="currentJob" name="currently_work" value="1" class="radio-btn">
                 <span class="text-sm">I currently work here</span>
@@ -80,7 +79,7 @@
         </div>
 
         <div class="flex items-center mb-4" x-data="{ selected: '' }">
-            <div class="w-full max-w-lg">
+            <div class="w-full">
                 <h3 class="text-white text-lg font-semibold mb-6">Experienced With</h3>
                 <div class="flex flex-wrap gap-2">
                     <template x-for="btn in ['WSI','Foreflight','Flightops','Flightaware']" :key="btn">

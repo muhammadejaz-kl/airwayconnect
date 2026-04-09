@@ -280,7 +280,7 @@ class ResumeController extends Controller
                     'residential_address' => 'required|string|max:500',
                     'is_licensed' => 'nullable|boolean',
                     'license_no' => 'nullable|string|max:255',
-                    'hobbies' => 'required|string|max:255',
+                    'hobbies' => 'nullable|string|max:255',
                     'language' => 'required|string|max:100',
                     'marital_status' => 'nullable|string|max:50',
                 ]);

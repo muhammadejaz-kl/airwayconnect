@@ -2,15 +2,6 @@
 
 @section('content')
 
-<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
-
-<style>
-    .scenario-font {
-        font-family: 'Courier Prime', monospace;
-        letter-spacing: 0.6px;
-    }
-</style>
-
 <div class="py-7 px-6">
     <div class="mx-auto w-full md:max-w-7xl p-2 sm:px-6 lg:px-8">
 
@@ -20,9 +11,9 @@
             <span class="text-gray-200 text-lg">Interview Preparation</span>
         </div>
 
-        <div class="bg-secondary-color flex flex-col gap-3 p-5 rounded-lg scenario-font">
+        <div class="bg-secondary-color flex flex-col gap-3 p-5 rounded-lg">
 
-            <h2 class="font-bold text-2xl text-white mb-5 scenario-font">
+            <h2 class="font-bold text-2xl text-white mb-5">
                 Interview Preparation
             </h2>
 

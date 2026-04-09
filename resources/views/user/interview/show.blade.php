@@ -2,14 +2,7 @@
 
 @section('content')
 
-    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
-
     <style>
-        .scenario-font {
-            font-family: 'Courier Prime', monospace;
-            letter-spacing: 0.6px;
-        }
-
         .notification-success {
             background-color: #28a745 !important;
             color: white !important;
@@ -32,11 +25,11 @@
                 <span class="text-gray-200 text-lg">{{ $topic->topic }}</span>
             </div>
 
-            <h2 class="font-bold text-2xl text-white mb-5 uppercase scenario-font">
+            <h2 class="font-bold text-2xl text-white mb-5 uppercase">
                 {{ $topic->topic }} Questions
             </h2>
 
-            <div class="bg-secondary-color p-6 rounded-xl shadow-lg relative scenario-font" id="questionContainer">
+            <div class="bg-secondary-color p-6 rounded-xl shadow-lg relative" id="questionContainer">
 
                 @if ($questions->count())
 
