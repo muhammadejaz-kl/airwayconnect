@@ -366,7 +366,7 @@ class ResumeController extends Controller
                     ]);
 
                     if (is_array($currentEducation['certificates'] ?? null)) {
-                        $currentEducation['certificates'] = implode(', ', $currentEducation['certificates']);
+                        $currentEducation['certificates'] = json_encode($currentEducation['certificates']);
                     }
 
                     $currentEducation['user_id'] = $userId;
@@ -382,7 +382,7 @@ class ResumeController extends Controller
 
                 foreach ($allEducations as $index => $edu) {
                     if (is_array($edu['certificates'] ?? null)) {
-                        $edu['certificates'] = implode(', ', $edu['certificates']);
+                        $edu['certificates'] = json_encode($edu['certificates']);
                     }
 
                     ResumeEducationCertification::create(array_merge($edu, [
@@ -598,14 +598,23 @@ class ResumeController extends Controller
         $skills     = ResumeUserSkill::where('user_id', $userId)->pluck('skill');
         $summary    = ResumeUserSummary::where('user_id', $userId)->first();
 
-        // Decode certificates stored as a JSON array string (e.g. ["Test Certification"])
+        // Decode certificates stored as JSON (supports both old string[] and new {name,month,year}[] format)
         foreach ($educations as $edu) {
             $raw = $edu->certificates ?? '';
             if (is_string($raw) && str_starts_with(ltrim($raw), '[')) {
                 $decoded = json_decode($raw, true);
-                $edu->certificates = is_array($decoded)
-                    ? implode(', ', array_filter($decoded))
-                    : $raw;
+                if (is_array($decoded)) {
+                    $parts = [];
+                    foreach ($decoded as $cert) {
+                        if (is_array($cert) && isset($cert['name']) && $cert['name'] !== '') {
+                            $date = trim(($cert['month'] ?? '') . ' ' . ($cert['year'] ?? ''));
+                            $parts[] = $cert['name'] . ($date ? ' (' . $date . ')' : '');
+                        } elseif (is_string($cert) && $cert !== '') {
+                            $parts[] = $cert;
+                        }
+                    }
+                    $edu->certificates = implode(', ', $parts);
+                }
             }
         }
 

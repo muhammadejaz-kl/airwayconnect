@@ -106,7 +106,7 @@
                 </button>
             </div>
 
-            <div id="certificatesContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4 hidden"></div>
+            <div id="certificatesContainer" class="flex flex-col gap-4 hidden"></div>
         </div>
 
         <div class="mb-8">
@@ -167,19 +167,54 @@
 
         function getCertificates() {
             const certificates = [];
-            $('.certificate-input').each(function() {
-                const val = $(this).val().trim();
-                if (val) certificates.push(val);
+            $('.certificate-item').each(function() {
+                const name = $(this).find('.certificate-name-input').val().trim();
+                const month = $(this).find('.certificate-month-input').val();
+                const year = $(this).find('.certificate-year-input').val();
+                if (name) certificates.push({ name, month, year });
             });
             return certificates;
         }
 
-        function addCertificateField(value = '') {
+        function addCertificateField(name = '', month = '', year = '') {
             certificateCount++;
+
+            const months = ['January','February','March','April','May','June',
+                            'July','August','September','October','November','December'];
+            let monthOptions = '<option value="">Month</option>';
+            months.forEach(m => {
+                monthOptions += `<option value="${m}" ${month === m ? 'selected' : ''}>${m}</option>`;
+            });
+
+            let yearOptions = '<option value="">Year</option>';
+            for (let y = currentYear; y >= startYear; y--) {
+                yearOptions += `<option value="${y}" ${year == y ? 'selected' : ''}>${y}</option>`;
+            }
+
             const field = `
-                <div class="flex items-center gap-2 certificate-item">
-                    <input type="text" class="w-full px-4 py-3 rounded-lg bg-secondary-color text-white certificate-input" placeholder="Enter certificate name" value="${value}">
-                    <button type="button" class="text-red-500 remove-certificate" title="Remove">🗑️</button>
+                <div class="rounded-lg certificate-item">
+                    <div class="flex justify-end mb-3">
+                        <button type="button" class="remove-certificate text-red-500 hover:text-red-400" title="Remove">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6h14zM10 11v6M14 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-white mb-2">Name <span class="text-red-600">*</span></label>
+                        <input type="text" class="w-full px-4 py-3 rounded-lg bg-secondary-color text-white certificate-name-input" placeholder="Enter certificate name" value="${name}">
+                    </div>
+                    <div>
+                        <label class="block text-white mb-2">Completion Date <span class="text-red-600">*</span></label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <select class="w-full px-4 py-3 rounded-lg bg-secondary-color text-white certificate-month-input">
+                                ${monthOptions}
+                            </select>
+                            <select class="w-full px-4 py-3 rounded-lg bg-secondary-color text-white certificate-year-input">
+                                ${yearOptions}
+                            </select>
+                        </div>
+                    </div>
                 </div>
             `;
             $('#certificatesContainer').append(field);
@@ -225,7 +260,7 @@
                             <div>
                                 <h4 class="text-base text-white mb-2 font-semibold">${edu.degree} in ${edu.field_of_study}</h4>
                                 <p class="text-sm text-white">${edu.school_name}, ${edu.school_location} | ${edu.graduation_month} ${edu.graduation_year}</p>
-                                ${edu.certificates.length ? `<p class="text-xs text-gray-300 mt-1">Certificates: ${edu.certificates.join(', ')}</p>` : ''}
+                                ${edu.certificates && edu.certificates.length ? `<p class="text-xs text-gray-300 mt-1">Certificates: ${edu.certificates.map(c => typeof c === 'object' ? c.name : c).join(', ')}</p>` : ''}
                                 ${edu.additional_coursework ? `<p class="text-xs text-gray-300 mt-1">Coursework: ${edu.additional_coursework}</p>` : ''}
                             </div>
                             <div class="flex space-x-3">
@@ -353,6 +388,7 @@
 
         function renderCertificates(certificates) {
             $('#certificatesContainer').empty();
+            certificateCount = 0;
 
             if (certificates && certificates.length > 0) {
                 $('#certificatesCheckbox').prop('checked', true);
@@ -360,13 +396,16 @@
                 $('#addCertificate').removeClass('hidden');
 
                 certificates.forEach(cert => {
-                    addCertificateField(cert);
+                    if (typeof cert === 'object') {
+                        addCertificateField(cert.name, cert.month, cert.year);
+                    } else {
+                        addCertificateField(cert);
+                    }
                 });
             } else {
                 $('#certificatesCheckbox').prop('checked', false);
                 $('#certificatesContainer').addClass('hidden');
                 $('#addCertificate').addClass('hidden');
-                certificateCount = 0;
             }
         }
 
