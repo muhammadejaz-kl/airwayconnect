@@ -75,57 +75,6 @@
         </div>
     </div>
 
-    <!-- View Coupon Modal -->
-    <div class="modal fade" id="viewCouponModal" tabindex="-1" aria-labelledby="viewCouponModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content shadow rounded-4 border-0">
-                <div class="modal-header bg-info text-white rounded-top-4">
-                    <h5 class="modal-title fw-bold" id="viewCouponModalLabel">
-                        <i class="fas fa-eye me-2"></i> View Coupon
-                    </h5>
-                </div>
-                <div class="modal-body px-4 py-4">
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <div class="card border-0 shadow-sm rounded-3 p-3">
-                                <h6 class="fw-semibold text-muted">Coupon Name</h6>
-                                <p class="fw-bold mb-0" id="view_coupon_name"></p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card border-0 shadow-sm rounded-3 p-3">
-                                <h6 class="fw-semibold text-muted">Coupon Code</h6>
-                                <p class="fw-bold mb-0" id="view_coupon_code"></p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card border-0 shadow-sm rounded-3 p-3">
-                                <h6 class="fw-semibold text-muted">Discount (%)</h6>
-                                <p class="fw-bold mb-0" id="view_coupon_discount"></p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card border-0 shadow-sm rounded-3 p-3">
-                                <h6 class="fw-semibold text-muted">Status</h6>
-                                <p class="fw-bold mb-0" id="view_coupon_status"></p>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="card border-0 shadow-sm rounded-3 p-3">
-                                <h6 class="fw-semibold text-muted">Description</h6>
-                                <p class="mb-0" id="view_coupon_description"></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer border-0 px-4 py-3">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="fas fa-times me-1"></i> Close
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 
 @push('scripts')
@@ -163,22 +112,6 @@
             $('#statusField').show();
 
             $('#couponModal').modal('show');
-        });
-
-        $(document).on('click', '.viewCouponBtn', function () {
-            let name = $(this).data('name');
-            let code = $(this).data('code');
-            let discount = $(this).data('discount');
-            let description = $(this).data('description');
-            let status = $(this).data('status') == 1 ? 'Active' : 'Inactive';
-
-            $('#view_coupon_name').text(name);
-            $('#view_coupon_code').text(code);
-            $('#view_coupon_discount').text(discount + '%');
-            $('#view_coupon_description').text(description || 'No description');
-            $('#view_coupon_status').text(status);
-
-            $('#viewCouponModal').modal('show');
         });
 
         $('#couponForm').on('submit', function () {

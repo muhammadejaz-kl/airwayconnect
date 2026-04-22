@@ -125,13 +125,15 @@ input:-webkit-autofill:focus {
     /* background-color: #1E40AF; */
     /* background-color: #9eb5ff; */
     background-color: #eaeefb;
-    height: 100vh;
+    /* height: 100vh; */
 }
 
 .event-details {
     margin-bottom: 10% !important;
 }
-
+.coupon-info .fw-semibold {
+    color: #333333;
+}
 .form-control {
     border: 1px solid #ddd;
     box-shadow: none;
@@ -1859,7 +1861,12 @@ input:checked+.slider:before {
         display: none;
     }
 }
-
+.coupon-info .card-body {
+    background: none;
+}
+.growth-trend .card-body {
+    background: none;
+}
 .card-header {
     border-bottom: 1px solid #e6e6e6;
     padding: 1rem 1.5rem
