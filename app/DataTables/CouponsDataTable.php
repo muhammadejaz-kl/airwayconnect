@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Coupon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -32,13 +33,22 @@ class CouponsDataTable extends DataTable
                     ? '<span class="badge bg-success">Active</span>'
                     : '<span class="badge bg-danger">Inactive</span>';
             })
+            ->editColumn('usage_count', function ($coupon) {
+                return $coupon->usage_count ?? 0;
+            })
             ->rawColumns(['status', 'action'])
             ->setRowId('id');
     }
 
     public function query(Coupon $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->newQuery()
+            ->withCount([
+                'transactions as usage_count' => function ($query) {
+                    $query->where('payment_status', 'paid')
+                        ->select(DB::raw('count(distinct user_id)'));
+                }
+            ]);
     }
 
     public function html(): HtmlBuilder
@@ -66,6 +76,7 @@ class CouponsDataTable extends DataTable
             Column::make('name')->title('Coupon Name'),
             Column::make('code'),
             Column::make('discount')->title('Discount (%)'),
+            Column::make('usage_count')->title('Usage')->addClass('text-center'),
             Column::make('status'),
             Column::make('created_at')->title('Created On'),
             Column::computed('action')

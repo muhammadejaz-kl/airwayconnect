@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
 use App\Models\Subscription;
+use App\Models\Transaction;
 
 class ProfileController extends Controller
 {
@@ -96,5 +97,28 @@ class ProfileController extends Controller
         }
 
         return back()->with(['success' => 'Profile updated successfully.']);
+    }
+
+    public function cancelSubscription()
+    {
+        $user = Auth::user();
+
+        if ((int) $user->premiun_status !== 1) {
+            return back()->with(['error' => 'No active subscription found.']);
+        }
+
+        $user->update([
+            'premiun_status' => 0,
+            'premium_start_date' => null,
+            'premium_end_date' => null,
+            'plan_id' => null,
+        ]);
+
+        Transaction::where('user_id', $user->id)
+            ->latest('id')
+            ->first()
+            ?->update(['payment_status' => 'canceled']);
+
+        return back()->with(['success' => 'Subscription canceled successfully.']);
     }
 }

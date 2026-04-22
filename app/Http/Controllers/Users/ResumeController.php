@@ -88,7 +88,16 @@ class ResumeController extends Controller
 
     public function saveJob(Request $request)
     {
-        $job = $request->all();
+        $job = $request->validate([
+            'job_title' => 'required|string|max:255',
+            'employer' => 'required|string|max:255',
+            'location' => 'nullable|string|max:255',
+            'remote' => 'nullable|boolean',
+            'currently_work' => 'nullable|boolean',
+            'start_date' => 'required|string|max:50',
+            'end_date' => 'nullable|string|max:50',
+            'experienced_with' => 'nullable|string|max:500',
+        ]);
 
         $jobs = session()->get('jobs', []);
 
@@ -114,10 +123,21 @@ class ResumeController extends Controller
     public function updateJob(Request $request)
     {
         $jobs = session('jobs', []);
-        $index = $request->input('index');
+        $validated = $request->validate([
+            'index' => 'required|integer',
+            'job_title' => 'required|string|max:255',
+            'employer' => 'required|string|max:255',
+            'location' => 'nullable|string|max:255',
+            'remote' => 'nullable|boolean',
+            'currently_work' => 'nullable|boolean',
+            'start_date' => 'required|string|max:50',
+            'end_date' => 'nullable|string|max:50',
+            'experienced_with' => 'nullable|string|max:500',
+        ]);
+        $index = $validated['index'];
 
         if (isset($jobs[$index])) {
-            $jobs[$index] = $request->except(['_token', 'index']);
+            $jobs[$index] = collect($validated)->except(['index'])->toArray();
             session(['jobs' => $jobs]);
         }
 
@@ -318,7 +338,7 @@ class ResumeController extends Controller
                         'start_date' => 'required|string|max:50',
                         'end_date' => 'nullable|string|max:50',
                         'currently_work' => 'nullable|boolean',
-                        'experienced_with' => 'nullable|string',
+                    'experienced_with' => 'nullable|string|max:500',
                     ]);
                     $currentJob['user_id'] = $userId;
                     $currentJob['active_status'] = 1;
@@ -423,7 +443,7 @@ class ResumeController extends Controller
 
             case 'summary':
                 $data = $request->validate([
-                    'professional_summary' => 'required|string',
+                    'professional_summary' => 'required|string|max:500',
                 ]);
 
                 $record = ResumeUserSummary::updateOrCreate(

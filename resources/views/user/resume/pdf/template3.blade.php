@@ -107,7 +107,7 @@
       </div>
     </div>
     @if(!empty($work->experienced_with))
-    <div class="exp-desc">{{ $work->experienced_with }}</div>
+    <div class="exp-desc"><strong>Job Description:</strong> {{ $work->experienced_with }}</div>
     @endif
     @endforeach
   </div>
@@ -251,7 +251,7 @@
       <div class="entry-clearfix"></div>
     </div>
     @if(!empty($work->experienced_with))
-    <div class="exp-desc">{{ $work->experienced_with }}</div>
+    <div class="exp-desc"><strong>Job Description:</strong> {{ $work->experienced_with }}</div>
     @endif
     @endforeach
   </div>
@@ -406,7 +406,7 @@
       </tr>
     </table>
     @if(!empty($work->experienced_with))
-    <div class="exp-desc">{{ $work->experienced_with }}</div>
+    <div class="exp-desc"><strong>Job Description:</strong> {{ $work->experienced_with }}</div>
     @endif
     @endforeach
   </div>

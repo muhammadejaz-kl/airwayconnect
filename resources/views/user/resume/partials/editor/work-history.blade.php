@@ -95,6 +95,17 @@
             </div>
         </div>
 
+        <div class="mb-6">
+            <label class="text-sm">Job Description</label>
+            <textarea
+                id="jobDescription"
+                name="experienced_with"
+                maxlength="500"
+                class="w-full px-3 py-2 rounded-lg bg-secondary-color min-h-[120px] resize-y"
+                placeholder="Describe your role and key responsibilities (max 500 characters)"></textarea>
+            <p class="text-xs text-gray-300 mt-1"><span id="jobDescriptionCount">0</span>/500</p>
+        </div>
+
         <div class="flex justify-start space-x-3">
             <button type="button" id="cancelJob"
                 class="border text-base border-gray-300 min-w-[200px] text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition"
@@ -136,6 +147,7 @@
             const experiencedWith = $('.experience-btn.bg-blue-600').map(function() {
                 return $(this).data('value');
             }).get().join(", ");
+            const jobDescription = $('#jobDescription').val().trim();
 
             const formData = {
                 job_title: $('#jobTitle').val(),
@@ -145,10 +157,11 @@
                 currently_work: $('#currentJob').is(':checked') ? 1 : 0,
                 start_date: $('#startMonth').val() + ' ' + $('#startYear').val(),
                 end_date: $('#currentJob').is(':checked') ? 'Present' : $('#endMonth').val() + ' ' + $('#endYear').val(),
-                experienced_with: experiencedWith
+                experienced_with: jobDescription || experiencedWith
             };
 
             if (!formData.job_title || !formData.employer || !$('#startMonth').val() || !$('#startYear').val() || (!formData.currently_work && (!$('#endMonth').val() || !$('#endYear').val()))) { alert('Please fill all required fields'); return; }
+            if (formData.experienced_with.length > 500) { alert('Job Description cannot exceed 500 characters'); return; }
 
             const url = editingIndex !== null ? "{{ route('user.resume.updateJob') }}" : "{{ route('user.resume.saveJob') }}";
 
@@ -262,6 +275,8 @@
             $('#jobTitle').val('');
             $('#employer').val('');
             $('#location').val('');
+            $('#jobDescription').val('');
+            $('#jobDescriptionCount').text('0');
 
             $('#isRemote').prop('checked', false);
             $('#currentJob').prop('checked', false);
@@ -320,10 +335,8 @@
 
                         $('.experience-btn').removeClass('bg-blue-600 text-white');
                         if (job.experienced_with) {
-                            job.experienced_with.split(",").forEach(exp => {
-                                $(`.experience-btn[data-value="${exp.trim()}"]`)
-                                    .addClass('bg-blue-600 text-white');
-                            });
+                            $('#jobDescription').val(job.experienced_with);
+                            $('#jobDescriptionCount').text(job.experienced_with.length);
                         }
 
                         $('#saveJob').text('Done');
@@ -357,6 +370,16 @@
                     }
                 }
             });
+        });
+
+        $('#jobDescription').on('input', function() {
+            const maxLength = 500;
+            let value = $(this).val();
+            if (value.length > maxLength) {
+                value = value.substring(0, maxLength);
+                $(this).val(value);
+            }
+            $('#jobDescriptionCount').text(value.length);
         });
     });
 </script>

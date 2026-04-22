@@ -184,11 +184,23 @@
 
                     <div class="flex justify-between items-center px-6 mt-6">
                         <h3 class="text-2xl text-white">Your Subscription</h3>
+                        <div class="flex items-center gap-3">
+                            @if($subscription)
+                                <form id="cancelSubscriptionForm" method="POST"
+                                    action="{{ route('user.profile.cancel-subscription') }}">
+                                    @csrf
+                                    <button type="button" id="cancelSubscriptionBtn"
+                                        class="px-4 py-2 bg-transparent border border-[#5a77a7] hover:bg-[#2b4468] text-white rounded-md text-sm font-semibold">
+                                        Cancel Subscription
+                                    </button>
+                                </form>
+                            @endif
 
-                        <a href="{{ route('user.premium.index') }}"
-                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-semibold">
-                            View Plans
-                        </a>
+                            <a href="{{ route('user.premium.index') }}"
+                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-semibold">
+                                View Plans
+                            </a>
+                        </div>
                     </div>
 
                     <div class="mx-6 mt-4 mb-6">
@@ -231,5 +243,89 @@
             }
         });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cancelBtn = document.getElementById('cancelSubscriptionBtn');
+            const cancelForm = document.getElementById('cancelSubscriptionForm');
+
+            if (!cancelBtn || !cancelForm) return;
+
+            cancelBtn.addEventListener('click', function () {
+                Swal.fire({
+                    html: `
+                        <div style="color:#fff;">
+                            <div style="display:flex;justify-content:center;margin-bottom:28px;">
+                                <div style="width:48px;height:48px;border-radius:9999px;background:#c8d2e3;color:#17305d;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:700;line-height:1;">?</div>
+                            </div>
+                            <h3 style="font-size:18px;line-height:1.25;margin:0 0 10px 0;font-weight:500;color:#ecf1f8;">Cancel Subscription</h3>
+                            <p style="font-size:14px;line-height:1.45;margin:0;color:#ecf1f8;">Are you sure you want to cancel the subscription?</p>
+                        </div>
+                    `,
+                    background: '#1e355b',
+                    showConfirmButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: 'Confirm',
+                    cancelButtonText: 'Close',
+                    reverseButtons: true,
+                    customClass: {
+                        popup: 'cancel-subscription-popup',
+                        actions: 'cancel-subscription-actions',
+                        confirmButton: 'cancel-subscription-confirm',
+                        cancelButton: 'cancel-subscription-close'
+                    },
+                    buttonsStyling: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        showPreloader();
+                        cancelForm.submit();
+                    }
+                });
+            });
+        });
+    </script>
+    <style>
+        .cancel-subscription-popup {
+            border: 1px solid #1f69c8 !important;
+            border-radius: 14px !important;
+            padding: 22px 20px 16px !important;
+            width: min(540px, 90vw) !important;
+            max-width: 540px !important;
+        }
+
+        .cancel-subscription-actions {
+            width: min(420px, 100%);
+            margin: 20px auto 0 !important;
+            display: grid !important;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .cancel-subscription-close,
+        .cancel-subscription-confirm {
+            border-radius: 8px;
+            min-height: 44px;
+            font-size: 14px;
+            font-weight: 500;
+            border: 1px solid #2f76c7;
+            color: #fff;
+            width: 100%;
+        }
+
+        .cancel-subscription-close {
+            background: #1e355b;
+        }
+
+        .cancel-subscription-close:hover {
+            background: #27426f;
+        }
+
+        .cancel-subscription-confirm {
+            background: #3168d8;
+        }
+
+        .cancel-subscription-confirm:hover {
+            background: #3f77e8;
+        }
+    </style>
 
 @endpush

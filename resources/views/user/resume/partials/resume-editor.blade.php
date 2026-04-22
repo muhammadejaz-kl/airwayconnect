@@ -274,7 +274,8 @@
             let experiencedWith = $('.experience-btn.bg-blue-600').map(function () {
                 return $(this).data('value');
             }).get().join(", ");
-            formData.append('experienced_with', experiencedWith);
+            const jobDescription = ($('#jobDescription').val() || '').trim();
+            formData.append('experienced_with', jobDescription || experiencedWith);
 
             $.ajax({
                 url: "{{ route('user.resume.store') }}",
@@ -415,9 +416,16 @@
             $('#step5 .error-message').remove();
 
             const summaryInput = $('#professional_summary');
+            const summaryText = summaryInput.val().trim();
             if (!summaryInput.val().trim()) {
                 if (summaryInput.next('.error-message').length === 0) {
                     summaryInput.after('<span class="text-red-600 text-sm error-message">Please enter your professional summary.</span>');
+                }
+                return;
+            }
+            if (summaryText.length > 500) {
+                if (summaryInput.next('.error-message').length === 0) {
+                    summaryInput.after('<span class="text-red-600 text-sm error-message">Professional summary cannot exceed 500 characters.</span>');
                 }
                 return;
             }
@@ -522,6 +530,14 @@
                 }
             });
         }
+
+        $('#professional_summary').on('input', function () {
+            const maxLength = 500;
+            const value = $(this).val();
+            if (value.length > maxLength) {
+                $(this).val(value.substring(0, maxLength));
+            }
+        });
 
     });
 </script>

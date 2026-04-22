@@ -10,6 +10,7 @@
         <textarea
             name="professional_summary"
             id="professional_summary"
+            maxlength="500"
             class="w-full px-4 py-3 rounded-lg bg-secondary-color text-white min-h-[300px] resize-y"
             placeholder="Write a brief summary of your experience and background..."></textarea>
     </div>

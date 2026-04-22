@@ -79,7 +79,7 @@
           <div class="tl-jobtitle">{{ $work->job_title }}</div>
           <div class="tl-employer">{{ $work->employer }}</div>
           @if(!empty($work->experienced_with))
-            <div class="tl-desc">{{ $work->experienced_with }}</div>
+            <div class="tl-desc"><strong>Job Description:</strong> {{ $work->experienced_with }}</div>
           @endif
         </td>
       </tr>

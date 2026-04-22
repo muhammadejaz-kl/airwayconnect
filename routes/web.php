@@ -204,6 +204,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', [UsersProfileController::class, 'index'])->name('index');
             Route::post('/check-password', [UsersProfileController::class, 'checkPassword'])->name('check-password');
             Route::post('update', [UsersProfileController::class, 'update'])->name('update');
+            Route::post('cancel-subscription', [UsersProfileController::class, 'cancelSubscription'])->name('cancel-subscription');
         });
 
         Route::prefix('resume')->name('resume.')->group(function () {

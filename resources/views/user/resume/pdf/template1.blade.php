@@ -73,7 +73,7 @@
         &nbsp;|&nbsp; {{ $work->remote == 1 ? 'Remote' : 'Full Time' }}
       </div>
       @if(!empty($work->experienced_with))
-        <div class="work-desc">{{ $work->experienced_with }}</div>
+        <div class="work-desc"><strong>Job Description:</strong> {{ $work->experienced_with }}</div>
       @endif
     @endforeach
   </div>
