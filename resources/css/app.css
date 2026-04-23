@@ -550,9 +550,15 @@ footer {
     } */
 /* } */
 .auth-form {
-    input {
+    input,
+    select {
         background: var(--color-primary-dark) !important;
         border-color: var(--color-primary-dark) !important;
+        color: var(--color-white);
+    }
+
+    select option {
+        background: var(--color-primary-dark);
         color: var(--color-white);
     }
 }

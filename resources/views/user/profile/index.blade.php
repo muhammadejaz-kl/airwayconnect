@@ -172,6 +172,16 @@
                                     <p class="text-gray-400">Email</p>
                                     <p>{{ Auth::user()->email }}</p>
                                 </div>
+
+                                <div>
+                                    <p class="text-gray-400">Username</p>
+                                    <p>{{ Auth::user()->username ?? 'N/A' }}</p>
+                                </div>
+
+                                <div>
+                                    <p class="text-gray-400">Job Title</p>
+                                    <p>{{ Auth::user()->job_title ?? 'N/A' }}</p>
+                                </div>
                             </div>
                         </div>
                     </div>

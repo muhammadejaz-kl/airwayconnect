@@ -38,7 +38,13 @@
         <!-- Job Title -->
         <div class="mt-4">
             <x-input-label for="job_title" :value="__('Job Title')" class="text-sm text-white" />
-            <x-text-input id="job_title" class="block mt-1 w-full" type="text" name="job_title" placeholder="Enter Your Job Title" :value="old('job_title')" autocomplete="organization-title" />
+            <select id="job_title" name="job_title"
+                class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                <option value="" disabled {{ old('job_title') ? '' : 'selected' }}>Select Your Job Title</option>
+                @foreach (['Dispatcher', 'Pilot', 'Flight Attendant', 'Mechanic', 'Traffic Controller', 'Other'] as $job)
+                    <option value="{{ $job }}" {{ old('job_title') === $job ? 'selected' : '' }}>{{ $job }}</option>
+                @endforeach
+            </select>
             <x-input-error :messages="$errors->get('job_title')" class="mt-2" />
         </div>
 
