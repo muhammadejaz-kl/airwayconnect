@@ -14,11 +14,17 @@ class InterviewSeeder extends Seeder
         $jsonPath = database_path('seeders/data/qna_output.json');
         $data = json_decode(file_get_contents($jsonPath), true);
 
-        // Skip if already seeded
-        if (InterviewTopic::count() > 0) {
+        // Skip if already seeded (check for our specific data)
+        if (InterviewTopic::where('topic', 'ALL TOPICS')->exists()) {
             $this->command->info('InterviewSeeder: data already exists, skipping.');
             return;
         }
+
+        // Clear any existing data (disable FK checks first)
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        InterviewQuestionAnswer::truncate();
+        InterviewTopic::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
         // Insert "ALL TOPICS" as first topic (special)
         $allTopics = InterviewTopic::create([
