@@ -10,8 +10,10 @@ class InterviewQuestionAnswer extends Model
         'topic_id',
         'type',
         'question',
+        'question_image',
         'options',
         'answer',
+        'answer_image',
         'status',
     ];
 

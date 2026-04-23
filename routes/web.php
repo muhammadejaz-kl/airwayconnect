@@ -268,6 +268,7 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('interview')->name('interview.')->group(function () {
             Route::get('/', [InterviewController::class, 'index'])->name('index');
             Route::get('show/{id}', [InterviewController::class, 'show'])->name('show');
+            Route::get('questions/{id}', [InterviewController::class, 'getQuestions'])->name('questions');
         });
 
         Route::prefix('resource')->name('resource.')->group(function () {
