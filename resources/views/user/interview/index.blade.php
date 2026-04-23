@@ -16,15 +16,15 @@
 
             @if ($topics->count())
 
-                <div class="flex flex-col lg:flex-row gap-4" style="min-height: 520px;">
+                <div class="flex flex-col lg:flex-row gap-4">
 
                     {{-- LEFT: Topics List --}}
-                    <div class="lg:w-1/3 flex flex-col gap-2 overflow-y-auto" style="max-height: 600px;">
+                    <div class="lg:w-1/3 flex flex-col gap-2 style="max-height: 600px;">
                         @foreach ($topics as $topic)
                             <button
                                 onclick="loadTopic({{ $topic->id }}, '{{ addslashes($topic->topic) }}')"
                                 id="topic-btn-{{ $topic->id }}"
-                                class="topic-btn flex items-center justify-between text-white text-sm text-left px-4 py-3 rounded-lg border border-transparent hover:border-primary-color hover:bg-white/5 transition-all">
+                                class="topic-btn flex items-center justify-between text-white text-sm text-left px-4 py-3 border-transparent hover:border-primary-color hover:bg-white/5 transition-all">
                                 <div class="flex items-center gap-2">
                                     <span class="text-base">✈</span>
                                     <span class="uppercase font-medium">{{ $topic->topic }}</span>
@@ -35,7 +35,7 @@
                     </div>
 
                     {{-- RIGHT: Q&A Panel --}}
-                    <div class="lg:w-2/3 bg-white/5 rounded-xl p-6 flex flex-col" style="min-height: 440px;">
+                    <div class="lg:w-2/3 bg-white/5 rounded-xl p-6 flex flex-col" style="height: fit-content; min-height: 400px;">
 
                         {{-- Empty state --}}
                         <div id="qa-empty" class="flex flex-col items-center justify-center flex-1 text-gray-400">
