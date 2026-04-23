@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             FaqSeeder::class,
             ResumeSkillSeeder::class,
             SubscriptionSeeder::class,
+            InterviewSeeder::class,
         ]);
 
     }
