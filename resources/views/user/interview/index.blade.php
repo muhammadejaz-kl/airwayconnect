@@ -19,7 +19,7 @@
                 <div class="flex flex-col lg:flex-row gap-4">
 
                     {{-- LEFT: Topics List --}}
-                    <div class="lg:w-1/3 flex flex-col gap-2 style="max-height: 600px;">
+                    <div class="lg:w-1/3 flex flex-col gap-2" style="max-height: 600px;">
                         @foreach ($topics as $topic)
                             <button
                                 onclick="loadTopic({{ $topic->id }}, '{{ addslashes($topic->topic) }}')"
